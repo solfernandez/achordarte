@@ -1,30 +1,45 @@
 #!/usr/bin/env python3
-from achordarte.notes import convert_midi_numero_de_tecla_to_note, VirtualInstrument, get_chord_name, Chord
+from achordarte.notes import convert_midi_key_number_to_note, VirtualInstrument, get_chord_name, Chord
+import enum
+#TODO: ESCRIBIR TEST DEL PROCESS_NOTE_OFF (QUE TESTEE LA LECTURA DE BYTES)
+MIDI_NOTE_ON_BITMASK = 0x90
+MIDI_NOTE_OFF_BITMASK = 0x80
 
-NOTE_ON_MASK = 0x90
+class MIDIEvent(enum.Enum):
+    NOTE_ON = 1
+    NOTE_OFF = 2
+
 
 f = open("/dev/snd/midiC1D0", "rb")
 virtual_instrument = VirtualInstrument()
 
 while True:
     current_byte = f.read(1)
+    print(current_byte)
     # we are not interested in these MIDI events
     if current_byte in [b'\xf8', b'\xfe']:
         continue
 
-    # get all Note On events from all MIDI channels
+    midi_event = None
     # Note On: 0x90 to 0x9F where the low nibble is the MIDI channel.
-    if ord(current_byte) & NOTE_ON_MASK == NOTE_ON_MASK:
-        numero_de_tecla = ord(f.read(1))
-        intensidad = ord(f.read(1))
+    # Note Off: 0x80 to 0x8F where the low nibble is the MIDI channel.
+    if ord(current_byte) & 0xF0 == MIDI_NOTE_ON_BITMASK:
+        midi_event = MIDIEvent.NOTE_ON
+    elif ord(current_byte) & 0xF0 == MIDI_NOTE_OFF_BITMASK:
+        midi_event = MIDIEvent.NOTE_OFF
 
-        nota = convert_midi_numero_de_tecla_to_note(numero_de_tecla)
-        if intensidad == 0:  # Es un Note off
-            # print("Note OFF: nota=%r" % nota)
-            virtual_instrument.process_note_off(nota)
+    if midi_event in [MIDIEvent.NOTE_ON, MIDIEvent.NOTE_OFF]:
+        key_number = ord(f.read(1))
+        intensity = ord(f.read(1))
+        print('intensity:', intensity)
+
+        note = convert_midi_key_number_to_note(key_number)
+        if midi_event is MIDIEvent.NOTE_OFF or (midi_event is MIDIEvent.NOTE_ON and intensity == 0):
+            print("Note OFF: note=%r" % note)
+            virtual_instrument.process_note_off(note)
         else:
-            virtual_instrument.process_note_on(nota)
-            # print("Note ON: nota=%r, intensidad=%r" % (nota, intensidad))
+            virtual_instrument.process_note_on(note)
+            # print("Note ON: note=%r, intensity=%r" % (note, intensity))
         print(virtual_instrument)
         current_notes = virtual_instrument.get_current_notes_as_list()
         if current_notes:
