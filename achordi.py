@@ -39,7 +39,6 @@ while True:
             virtual_instrument.process_note_off(note)
         else:
             virtual_instrument.process_note_on(note)
-            # print("Note ON: note=%r, intensity=%r" % (note, intensity))
         print(virtual_instrument)
         current_notes = virtual_instrument.get_current_notes_as_list()
         if current_notes:
