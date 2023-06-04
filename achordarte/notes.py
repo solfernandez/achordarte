@@ -98,7 +98,6 @@ i7m = Interval(semitones=10)
 i7M = Interval(semitones=11)
 i9 = Interval(semitones=14)
 
-
 major_chord = ProtoChord([i3M, i5])
 major_chord_7 = ProtoChord([i3M, i5, i7m])
 major_chord_7_9 = ProtoChord([i3M, i5, i7m, i9])
