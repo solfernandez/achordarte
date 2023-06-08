@@ -78,8 +78,9 @@ class Chord:
         return self.base_note == other.base_note and self.intervals == other.intervals
 
 class ProtoChord:
-    def __init__(self, intervals):
+    def __init__(self, intervals, name=''):
         self.intervals = intervals
+        self.name = name
 
     def __eq__(self, other):
         if hasattr(other, 'intervals'):
@@ -99,13 +100,13 @@ i7M = Interval(semitones=11)
 i9 = Interval(semitones=14)
 
 major_chord = ProtoChord([i3M, i5])
-major_chord_7 = ProtoChord([i3M, i5, i7m])
-major_chord_7_9 = ProtoChord([i3M, i5, i7m, i9])
-major_chord_maj7 = ProtoChord([i3M, i5, i7M])
-minor_chord = ProtoChord([i3m, i5])
-minor_chord_7 = ProtoChord([i3m, i5, i7m])
+major_chord_7 = ProtoChord([i3M, i5, i7m], '7')
+major_chord_7_9 = ProtoChord([i3M, i5, i7m, i9], '9')
+major_chord_maj7 = ProtoChord([i3M, i5, i7M], 'maj7')
+minor_chord = ProtoChord([i3m, i5], 'm')
+minor_chord_7 = ProtoChord([i3m, i5, i7m], 'm7')
 
-chord_types = {major_chord, major_chord_7, major_chord_maj7, minor_chord, minor_chord_7}
+chord_types = {major_chord, major_chord_7, major_chord_7_9, major_chord_maj7, minor_chord, minor_chord_7}
 
 def classify_chord(chord):
     protochord = ProtoChord(chord.intervals)
@@ -115,16 +116,7 @@ def classify_chord(chord):
 
 def get_chord_name(chord):
     chord_type = classify_chord(chord)
-    if chord_type == major_chord:
-        return chord.base_note.base_name().capitalize()
-    elif chord_type == major_chord_7:
-        return chord.base_note.base_name().capitalize() + '7'
-    elif chord_type == major_chord_maj7:
-        return chord.base_note.base_name().capitalize() + 'maj7'
-    elif chord_type == minor_chord:
-        return chord.base_note.base_name().capitalize() + "m"
-    elif chord_type == minor_chord_7:
-        return chord.base_note.base_name().capitalize() + "m7"
+    return chord.base_note.base_name().capitalize() + chord_type.name
 
 c4, d4, e4, f4, g4, a4, b4 = Note(0), Note(2), Note(4), Note(5), Note(7), Note(9), Note(11)
 c4_sharp, d4_sharp, e4_sharp, f4_sharp, g4_sharp, a4_sharp, b4_sharp = Note(1), Note(3), Note(5), Note(6), Note(8), Note(10), Note(12)
