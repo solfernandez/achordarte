@@ -78,10 +78,10 @@ class Chord:
         return self.base_note == other.base_note and self.intervals == other.intervals
 
 class ProtoChord:
-    def __init__(self, name='', intervals):
+    def __init__(self, name, intervals):
         self.name = name
         self.intervals = intervals
-        
+
     def __eq__(self, other):
         if hasattr(other, 'intervals'):
             return self.intervals == other.intervals
@@ -99,7 +99,7 @@ i7m = Interval(semitones=10)
 i7M = Interval(semitones=11)
 i9 = Interval(semitones=14)
 
-major_chord = ProtoChord([i3M, i5])
+major_chord = ProtoChord('', [i3M, i5])
 major_chord_7 = ProtoChord('7', [i3M, i5, i7m])
 major_chord_7_9 = ProtoChord('9', [i3M, i5, i7m, i9])
 major_chord_maj7 = ProtoChord('maj7', [i3M, i5, i7M])
@@ -109,7 +109,7 @@ minor_chord_7 = ProtoChord('m7', [i3m, i5, i7m])
 chord_types = {major_chord, major_chord_7, major_chord_7_9, major_chord_maj7, minor_chord, minor_chord_7}
 
 def classify_chord(chord):
-    protochord = ProtoChord(chord.intervals)
+    protochord = ProtoChord('unknown', chord.intervals)
     for chord_type in chord_types:
         if chord_type == protochord:
             return chord_type
