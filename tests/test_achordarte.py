@@ -1,5 +1,5 @@
 import pytest
-from achordarte.midi import (VirtualInstrument, convert_midi_key_number_to_note)
+from achordarte.midi import VirtualInstrument, convert_midi_key_number_to_note
 from achordarte.notes import (Interval,
                               c4, d4, e4, g4, d4_flat, c4_sharp, e4_flat, b4_flat, b4,
                               i3M, i3m, i5, notes_interval,
