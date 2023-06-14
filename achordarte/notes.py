@@ -1,11 +1,6 @@
 import math
 
-MIDI_C4_NUMBER = 60
 ordered_note_names = ['c', 'c#', "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"]
-
-
-def convert_midi_key_number_to_note(key_number):
-    return Note(semitones_to_c4=key_number - MIDI_C4_NUMBER)
 
 
 class Note:
@@ -40,28 +35,6 @@ class Interval:
 
 def notes_interval(note_from, note_to):
     return Interval(note_to.semitones_to_c4 - note_from.semitones_to_c4)
-
-
-class VirtualInstrument:
-    def __init__(self):
-        self.current_notes = set()
-
-    def __repr__(self):
-        return 'VirtualInstrument: ' + repr(sorted(self.current_notes))
-
-    def process_note_on(self, note):
-        self.current_notes.add(note)
-
-    def process_note_off(self, note):
-        if note in self.current_notes:
-            self.current_notes.remove(note)
-
-    def get_current_notes(self):
-        return self.current_notes
-
-    def get_current_notes_as_list(self):
-        return sorted(list(self.current_notes))
-
 
 class Chord:
     def __init__(self, base_note, intervals):
