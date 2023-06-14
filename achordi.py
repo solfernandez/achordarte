@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
-from achordarte.notes import convert_midi_key_number_to_note, VirtualInstrument, get_chord_name, Chord
+from achordarte.notes import get_chord_name, Chord
+from achordarte.midi import convert_midi_key_number_to_note, VirtualInstrument, MIDI_NOTE_ON_BITMASK, MIDI_NOTE_OFF_BITMASK
 import enum
-#TODO: ESCRIBIR TEST DEL PROCESS_NOTE_OFF (QUE TESTEE LA LECTURA DE BYTES)
-MIDI_NOTE_ON_BITMASK = 0x90
-MIDI_NOTE_OFF_BITMASK = 0x80
 
-class MIDIEvent(enum.Enum):
-    NOTE_ON = 1
-    NOTE_OFF = 2
+#TODO: ESCRIBIR TEST DEL PROCESS_NOTE_OFF (QUE TESTEE LA LECTURA DE BYTES)
 
 
 f = open("/dev/snd/midiC1D0", "rb")

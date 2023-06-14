@@ -1,10 +1,10 @@
 import pytest
-from achordarte.notes import (VirtualInstrument, Interval,
+from achordarte.midi import (VirtualInstrument, convert_midi_key_number_to_note)
+from achordarte.notes import (Interval,
                               c4, d4, e4, g4, d4_flat, c4_sharp, e4_flat, b4_flat, b4,
                               i3M, i3m, i5, notes_interval,
                               Note, Chord, classify_chord, major_chord, major_chord_maj7, major_chord_7, minor_chord,
-                              minor_chord_7, get_chord_name,
-                              convert_midi_key_number_to_note)
+                              minor_chord_7, get_chord_name)
 
 
 def test_playing_with_the_instrument():
