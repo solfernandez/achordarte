@@ -89,7 +89,8 @@ def classify_chord(chord):
 
 def get_chord_name(chord):
     chord_type = classify_chord(chord)
-    return chord.base_note.base_name().capitalize() + chord_type.name
+    if chord_type:
+        return chord.base_note.base_name().capitalize() + chord_type.name
 
 c4, d4, e4, f4, g4, a4, b4 = Note(0), Note(2), Note(4), Note(5), Note(7), Note(9), Note(11)
 c4_sharp, d4_sharp, e4_sharp, f4_sharp, g4_sharp, a4_sharp, b4_sharp = Note(1), Note(3), Note(5), Note(6), Note(8), Note(10), Note(12)
