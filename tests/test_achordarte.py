@@ -5,7 +5,9 @@ from achordarte.notes import (Interval,
                               i3M, i3m, i5, notes_interval,
                               Note, Chord, classify_chord, major_chord, major_chord_maj7, major_chord_7, minor_chord,
                               minor_chord_7, get_chord_name)
-
+from achordarte.main import main
+import os
+DIR = os.path.dirname(os.path.abspath(__file__))
 
 def test_playing_with_the_instrument():
     vi = VirtualInstrument()
@@ -82,6 +84,12 @@ def test_midi_to_notes():
     d3 = Note(semitones_to_c4=-10)
     assert convert_midi_key_number_to_note(60) == c4
     assert convert_midi_key_number_to_note(50) == d3
+
+#hacer un test que llame a la funcion main y le pase un archivo
+def test_main_input_file():
+    midi_file = os.path.join(DIR, 'midi_test_file')
+    main(midi_file)
+
 
 
 #def test_file_to_chords():
