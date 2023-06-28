@@ -2,6 +2,5 @@
 from achordarte.main import main
 
 
-midi_file = "/dev/snd/midiC1D0"
-
-main(midi_file)
+input_file = "/dev/snd/midiC1D0"
+main(input_file)

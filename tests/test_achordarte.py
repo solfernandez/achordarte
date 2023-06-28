@@ -85,15 +85,27 @@ def test_midi_to_notes():
     assert convert_midi_key_number_to_note(60) == c4
     assert convert_midi_key_number_to_note(50) == d3
 
-#hacer un test que llame a la funcion main y le pase un archivo
-def test_main_input_file():
-    midi_file = os.path.join(DIR, 'midi_test_file')
-    main(midi_file)
+# def test_main_input_empty_file():
+#     input_file = os.path.join(DIR, 'empty_test_file')
+#     chords = main(input_file)
+#     assert chords == []
 
 
+def test_main_input_empty_file(tmp_path):
+    content = ''
+    f = tmp_path / "empty_test_file"
+    f.write_text(content)
+    input_file = open(f)
+    chords = main(input_file.name)
+    assert chords == []
 
-#def test_file_to_chords():
-#    chords = chordify_file("tests/song.rec")
-#    c_major = Chord.from_notes([c4, e4, g4])
-#    c_minor = Chord.from_notes([c4, e4_flat, g4])
-#    assert chords == [c_major, c_minor]
+def test_main_input_file(tmp_path):
+    content = b'\x90\x3C\x40\x90\x40\x40\x90\x43\x40'
+    file_path = tmp_path / "test_file"
+    input_file = open(file_path, 'wb')
+    input_file.write(content)
+    input_file.close()
+    chords = main(input_file.name)
+    c_major = Chord.from_notes([c4, e4, g4])
+    assert chords == [c_major]
+

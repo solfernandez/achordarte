@@ -8,14 +8,15 @@ import enum
 
 #midi_file = "/dev/snd/midiC1D0"
 
-def main(midi_file):
-    f = open(midi_file, "rb")
+def main(input_file):
+    f = open(input_file, "rb")
     virtual_instrument = VirtualInstrument()
-
+    chords = []
     while True:
         current_byte = f.read(1)
-        breakpoint()
         #print(current_byte)
+        if current_byte == b'':
+            break
         # we are not interested in these MIDI events
         if current_byte in [b'\xf8', b'\xfe']:
             continue
@@ -42,4 +43,10 @@ def main(midi_file):
             print(virtual_instrument)
             current_notes = virtual_instrument.get_current_notes_as_list()
             if current_notes:
-                print("\tchord: ", get_chord_name(Chord.from_notes(current_notes)))
+                chord = Chord.from_notes(current_notes)
+                chord_name = get_chord_name(chord)
+                if chord_name:
+                    print("\tchord: ", chord_name)
+                    chords.append(chord)
+    return chords
+
