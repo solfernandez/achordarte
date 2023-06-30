@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 from achordarte.notes import get_chord_name, Chord
 from achordarte.midi import convert_midi_key_number_to_note, VirtualInstrument, MIDIEvent, MIDI_NOTE_ON_BITMASK, MIDI_NOTE_OFF_BITMASK
-import enum
+import logging
+
 
 #TODO: ESCRIBIR TEST DEL PROCESS_NOTE_OFF (QUE TESTEE LA LECTURA DE BYTES)
 
+logger = logging.getLogger(__name__)
 
-#midi_file = "/dev/snd/midiC1D0"
 
 def main(input_file):
     f = open(input_file, "rb")
@@ -14,7 +15,7 @@ def main(input_file):
     chords = []
     while True:
         current_byte = f.read(1)
-        #print(current_byte)
+        logger.debug("current byte: %s", current_byte)
         if current_byte == b'':
             break
         # we are not interested in these MIDI events
@@ -32,15 +33,15 @@ def main(input_file):
         if midi_event in [MIDIEvent.NOTE_ON, MIDIEvent.NOTE_OFF]:
             key_number = ord(f.read(1))
             intensity = ord(f.read(1))
-            #print('intensity:', intensity)
+            logger.debug("intensity: %s", intensity)
 
             note = convert_midi_key_number_to_note(key_number)
             if midi_event is MIDIEvent.NOTE_OFF or (midi_event is MIDIEvent.NOTE_ON and intensity == 0):
-            #    print("Note OFF: note=%r" % note)
+                logger.debug("Note OFF: note=%r", note)
                 virtual_instrument.process_note_off(note)
             else:
                 virtual_instrument.process_note_on(note)
-            print(virtual_instrument)
+            logger.debug("%r", virtual_instrument)
             current_notes = virtual_instrument.get_current_notes_as_list()
             if current_notes:
                 chord = Chord.from_notes(current_notes)
